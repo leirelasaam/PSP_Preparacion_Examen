@@ -1,4 +1,4 @@
-package hilos.ejercicios4;
+package hilos.ejercicio4;
 
 public class DetonadorConRetardo extends Thread {
 	

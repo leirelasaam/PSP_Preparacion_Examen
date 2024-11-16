@@ -1,4 +1,4 @@
-package hilos.ejercicios4;
+package hilos.ejercicio4;
 
 /**
  * Crea un programa que contenga dos clases, Principal y DetonadorConRetardo. La
