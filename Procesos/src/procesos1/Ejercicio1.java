@@ -1,17 +1,17 @@
-package procesos;
+package procesos1;
 
 import java.io.IOException;
 
 /**
- * Haz un programa que obtenga la dirección MAC y la muestre por pantalla
+ * Ejecutar una aplicación de Windows. (Bloc de notas, Word, …)
  */
-public class Ejercicio3 {
-
+public class Ejercicio1 {
+	
 	public static void main(String[] args) {
 		Procesos procesos = new Procesos();
-		String[] infoProceso = { "cmd", "/c", "getmac" };
+		String[] infoProceso = {"Notepad"};
 		try {
-			procesos.ejecutarProcesoRuntime(infoProceso, true, true, true);
+			procesos.ejecutarProcesoPB(infoProceso, false, false, false);
 		} catch (IOException e) {
 			System.out.println("Error IO ejecutando procesos: " + e.getMessage());
 		} catch (InterruptedException e) {

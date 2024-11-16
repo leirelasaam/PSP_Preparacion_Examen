@@ -1,13 +1,10 @@
-package procesos;
+package procesos1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class Procesos {
 
-	protected Procesos() {
+	public Procesos() {
 
 	}
 
@@ -24,7 +21,7 @@ public class Procesos {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	protected void ejecutarProcesoRuntime(String[] infoProceso, boolean leerResultado, boolean buffered,
+	public void ejecutarProcesoRuntime(String[] infoProceso, boolean leerResultado, boolean buffered,
 			boolean esperar) throws IOException, InterruptedException {
 		Runtime r = Runtime.getRuntime();
 		Process proceso = r.exec(infoProceso);
@@ -34,9 +31,9 @@ public class Procesos {
 			if (esperar)
 				proceso.waitFor();
 			if (buffered)
-				leerResultadoBuffered(proceso);
+				System.out.println(leerResultadoBuffered(proceso));
 			else
-				leerResultado(proceso);
+				System.out.println(leerResultado(proceso));
 		}
 	}
 
@@ -53,7 +50,7 @@ public class Procesos {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	protected void ejecutarProcesoPB(String[] infoProceso, boolean leerResultado, boolean buffered, boolean esperar)
+	public void ejecutarProcesoPB(String[] infoProceso, boolean leerResultado, boolean buffered, boolean esperar)
 			throws IOException, InterruptedException {
 		ProcessBuilder pb = new ProcessBuilder(infoProceso);
 		Process proceso = pb.start();
@@ -63,9 +60,9 @@ public class Procesos {
 			if (esperar)
 				proceso.waitFor();
 			if (buffered)
-				leerResultadoBuffered(proceso);
+				System.out.println(leerResultadoBuffered(proceso));
 			else
-				leerResultado(proceso);
+				System.out.println(leerResultado(proceso));
 		}
 	}
 
@@ -74,37 +71,87 @@ public class Procesos {
 	 * caracter.
 	 * 
 	 * @param p Proceso del cual se quiere leer el resultado.
+	 * @return Salida del proceso como String.
 	 * @throws IOException
 	 */
-	private void leerResultado(Process p) throws IOException {
+	private String leerResultado(Process p) throws IOException {
 		// Leer el contenido de la consola
 		InputStream is = p.getInputStream();
 		int c;
+		StringBuilder sb = new StringBuilder();
 		// El valor -1 indica fin del input, no hay nada más que leer
 		while ((c = is.read()) != -1) {
-			System.out.print((char) c);
+			sb.append((char) c);
 		}
 
 		is.close();
+
+		return sb.toString();
 	}
 
 	/**
 	 * Lee el resultado de un proceso mediante BufferedReader. Se lee línea a línea.
 	 * 
 	 * @param p Proceso del cual se quiere leer el resultado.
+	 * @return Salida del proceso como String.
 	 * @throws IOException
 	 */
-	private void leerResultadoBuffered(Process p) throws IOException {
+	private String leerResultadoBuffered(Process p) throws IOException {
 		InputStream is = p.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
 
 		String linea;
+		StringBuilder sb = new StringBuilder();
 		// Se llega al final de la lectura si la línea es un valor nulo
 		while ((linea = br.readLine()) != null) {
-			System.out.println(linea);
+			sb.append(linea);
 		}
 
 		br.close();
+
+		return sb.toString();
+	}
+
+	/**
+	 * Ejecuta el comando tasklist para determinar si el proceso está en ejecución y
+	 * en ese caso, lo mata.
+	 * 
+	 * @param nombreProceso Nombre del proceso a matar.
+	 * @throws IOException
+	 */
+	@SuppressWarnings("deprecation")
+	public void matarSiEstaVivo(String nombreProceso) throws IOException {
+		String[] infoProceso = { "cmd.exe", "/c", "tasklist" };
+		ProcessBuilder pb = new ProcessBuilder(infoProceso);
+
+		System.out.println("Buscando el proceso " + nombreProceso);
+		Process proceso = pb.start();
+
+		String resultado = leerResultadoBuffered(proceso);
+
+		if (resultado.contains(nombreProceso)) {
+			Runtime.getRuntime().exec("taskkill /F /IM " + nombreProceso);
+			System.out.println("Se ha cerrado el proceso " + nombreProceso);
+		} else {
+			System.out.println("El proceso " + nombreProceso + " no está en ejecución");
+		}
+	}
+	
+	public void ejecutarBat(String rutaBat, String rutaError, String rutaOutput) throws IOException {
+		ProcessBuilder pb = new ProcessBuilder(rutaBat);
+		
+		File ficheroError = new File(rutaError);
+		if (!ficheroError.exists())
+			ficheroError.createNewFile();
+		pb.redirectError(ficheroError);
+		
+		File ficheroOutput = new File(rutaOutput);
+		if (!ficheroOutput.exists())
+			ficheroOutput.createNewFile();
+		pb.redirectOutput(ficheroOutput);
+		
+		System.out.println("Ejecutando bat");
+		pb.start();
 	}
 }

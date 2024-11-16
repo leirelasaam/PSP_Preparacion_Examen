@@ -1,17 +1,18 @@
-package procesos;
+package procesos1;
 
 import java.io.IOException;
 
 /**
- * Ejecutar una aplicación de Windows. (Bloc de notas, Word, …)
+ * Haz un programa que muestre los procesos en ejecución.
  */
-public class Ejercicio1 {
+public class Ejercicio4 {
 	
 	public static void main(String[] args) {
 		Procesos procesos = new Procesos();
-		String[] infoProceso = {"Notepad"};
+		String[] infoProceso = { "cmd", "/c", "tasklist" };
 		try {
-			procesos.ejecutarProcesoPB(infoProceso, false, false, false);
+			// Si se espera a que termine el proceso no funciona. Por ello, el último parámetro es false.
+			procesos.ejecutarProcesoRuntime(infoProceso, true, true, false);
 		} catch (IOException e) {
 			System.out.println("Error IO ejecutando procesos: " + e.getMessage());
 		} catch (InterruptedException e) {
