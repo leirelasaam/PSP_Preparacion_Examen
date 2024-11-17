@@ -84,8 +84,13 @@ Por defecto, aparecerá un 6.
 **Importante: Los caballos se han de parar cuando uno de ellos llega al final.**
 
 ## Ejercicios Extra de Hilos
-1. Contador Concurrente
-Crea un programa en el que varios hilos incrementen un contador compartido de manera concurrente. Asegúrate de que el valor final del contador sea correcto después de que todos los hilos hayan terminado su ejecución.
+1. Reto
+Se trata de tener un cronómetro principal y un cronómetro regresivo. Cuando termina el regresivo se espera 3s y se finaliza el general. Se deben pausar a la vez y reanudar.
+
+2. Cajero
+El cajero permite dos tipos de operaciones: ingresar dinero y retirar dinero. Sin embargo, solo puede realizarse una operación a la vez, es decir, si una persona está ingresando dinero, nadie más podrá retirar dinero, y viceversa. 
+
+
 
 2. Simulación de Productor y Consumidor
 Implementa una simulación de un sistema productor-consumidor, donde un productor genera datos y los coloca en un buffer, mientras que un consumidor toma esos datos para procesarlos. Asegúrate de que el acceso al buffer compartido sea adecuado para evitar errores de concurrencia.
